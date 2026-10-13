@@ -351,10 +351,15 @@
   padding: var(--hf-space-500) var(--hf-space-500) var(--hf-space-600);
   overflow: clip;
   border-radius: var(--hf-radius-300);
-  /* Branded CTA fill — no gradient token exists for this marketing lime sheen. */
+  /* Branded CTA fill — no gradient token exists for this marketing sheen.
+     The accent and its highlight follow the niche theme (app/layout.tsx). */
   background-image:
-    linear-gradient(191deg, rgba(255, 255, 20, 0) 12.7%, rgb(255, 255, 20) 75.8%),
-    linear-gradient(90deg, rgb(209, 254, 23) 0%, rgb(209, 254, 23) 100%);
+    linear-gradient(
+      191deg,
+      color-mix(in srgb, var(--color-lime-highlight, rgb(255, 255, 20)) 0%, transparent) 12.7%,
+      var(--color-lime-highlight, rgb(255, 255, 20)) 75.8%
+    ),
+    linear-gradient(90deg, var(--color-lime) 0%, var(--color-lime) 100%);
   color: var(--hf-color-text-inverse);
   cursor: pointer;
   outline: none;

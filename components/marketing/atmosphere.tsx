@@ -24,7 +24,7 @@ export function Atmosphere({
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `radial-gradient(60% 55% at ${at}, rgba(209,254,23,0.16) 0%, rgba(209,254,23,0.05) 45%, transparent 75%)`,
+          backgroundImage: `radial-gradient(60% 55% at ${at}, color-mix(in srgb, var(--color-lime) 16%, transparent) 0%, color-mix(in srgb, var(--color-lime) 5%, transparent) 45%, transparent 75%)`,
         }}
       />
       <div

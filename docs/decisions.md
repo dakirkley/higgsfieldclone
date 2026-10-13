@@ -148,6 +148,18 @@ image, Plus 6 / 8, Ultra 8 / 12.
   generator pages use the site's left control panel + right canvas.
 - **Audio nav item hidden** while the catalog has no audio models (see
   `model-catalog.md`); appears automatically when one is added.
+- **Niche packs (2026-10-13):** one codebase serves several brands, one per
+  deployment, chosen by `NEXT_PUBLIC_NICHE` at build time (`niches/<id>/`).
+  Rejected: a repo per niche (every billing/ledger fix would be repeated per
+  copy) and one multi-tenant deployment (shared database and Stripe account
+  across brands; revisit once several niches are live). A pack is plain data
+  (no `lib/**` imports) so client components, scripts and the mock read it.
+  The model filter narrows `MODELS` in `generation/catalog/index.ts`, so the
+  server rejects unsold models exactly like unknown ones. A pack's `theme.accent`
+  replaces lime everywhere (Quanta lime primitives are overridden on `<html>`);
+  the "lime is reserved for the Generate CTA and active states" rule applies to
+  whatever the accent is. The `default` pack reproduces the original Vireo site
+  pixel for pixel.
 
 ## Implementation decisions (build)
 

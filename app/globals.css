@@ -105,7 +105,10 @@
     cursor: not-allowed;
   }
   .btn-keycap-generate {
-    background-image: radial-gradient(#effe17 40%, #d1fe17 100%);
+    background-image: radial-gradient(
+      var(--color-lime-highlight, #effe17) 40%,
+      var(--color-lime) 100%
+    );
   }
   .btn-keycap-white {
     background-color: #ffffff;

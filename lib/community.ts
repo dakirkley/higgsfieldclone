@@ -4,6 +4,7 @@ import { ObjectId, type Filter } from "mongodb"
 import { z } from "zod"
 
 import type { MediaKind, Surface } from "@/generation/catalog/types"
+import { BRAND } from "@/lib/brand"
 import { UserFacingError } from "@/lib/errors"
 import type { SessionUser } from "@/lib/auth/session"
 import { objectIdOrNotFound } from "@/lib/ids"
@@ -47,7 +48,7 @@ const PUBLIC_FILTER: Filter<GenerationDoc> = {
 function displayName(user?: Pick<UserDoc, "name" | "email"> | null): string {
   const name = user?.name?.trim()
   if (name) return name.split(/\s+/)[0]!.slice(0, 24)
-  return "Vireo creator"
+  return BRAND.creatorFallback
 }
 
 async function withAuthors(docs: GenerationDoc[]): Promise<PublicGeneration[]> {

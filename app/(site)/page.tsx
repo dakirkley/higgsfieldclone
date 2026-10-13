@@ -25,17 +25,10 @@ import {
 import { LoopVideo } from "@/components/media/loop-video"
 import { findModel, MODELS } from "@/generation/catalog"
 import type { ModelEntry } from "@/generation/catalog/types"
-import { FAMILY_LOOPS, familyCover, HERO } from "@/lib/showcase"
+import { FAMILY_LOOPS, familyCover } from "@/lib/showcase"
+import { NICHE } from "@/niches"
 
-/** Top-of-page tool cards (§3.2): the models we lead with. */
-const TOOL_IDS = [
-  "seedance-2.5",
-  "kling-3-std",
-  "soul-2",
-  "cinema-studio-4",
-  "genjutsu-motion",
-  "marketing-image-flare",
-] as const
+const { hero, promo, sections, closing } = NICHE.home
 
 function generatorHref(model: ModelEntry): string {
   return `/${model.surface}?model=${encodeURIComponent(model.id)}`
@@ -75,9 +68,9 @@ export default async function ExplorePage() {
     loadEffects(),
     loadPublic({ limit: 12 }),
   ])
-  const tools = TOOL_IDS.map((id) => findModel(id)).filter(
-    (model): model is ModelEntry => Boolean(model)
-  )
+  const tools = NICHE.home.toolIds
+    .map((id) => findModel(id))
+    .filter((model): model is ModelEntry => Boolean(model))
   const modelFamilies = families()
 
   return (
@@ -89,8 +82,8 @@ export default async function ExplorePage() {
       >
         <div className="absolute inset-0 -z-20">
           <LoopVideo
-            src={HERO.video}
-            poster="/media/loops/hero.jpg"
+            src={hero.video}
+            poster={hero.poster}
             className="absolute inset-0 size-full object-[50%_70%]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-page/75 via-transparent via-45% to-page" />
@@ -100,33 +93,31 @@ export default async function ExplorePage() {
         <div className="mx-auto flex min-h-[600px] max-w-[1440px] flex-col items-center justify-start gap-6 px-4 pt-20 pb-44 text-center md:min-h-[min(90svh,820px)] md:pt-28">
           <span className="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-black/30 px-3 text-xs font-medium text-white/85 backdrop-blur-md">
             <Sparkles className="size-3.5 text-lime" aria-hidden />
-            Every frontier model, one studio
+            {hero.eyebrow}
           </span>
           <h1
             id="hero-title"
             className="font-display text-[44px] leading-[0.92] text-white sm:text-[60px] md:text-[80px] lg:text-[96px]"
           >
-            Direct the shot.
+            {hero.title[0]}
             <br />
-            <span className="text-lime">Skip the set.</span>
+            <span className="text-lime">{hero.title[1]}</span>
           </h1>
           <p className="max-w-[560px] text-base text-white/80 [text-shadow:0_1px_14px_rgba(0,0,0,0.7)] md:text-lg">
-            Turn a sentence or a single frame into cinematic video and images.
-            Seedance, Kling, Soul and dozens more models share one credit
-            balance and one library.
+            {hero.body}
           </p>
           <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
             <Link
-              href="/video"
+              href={hero.primary.href}
               className="btn-keycap inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl px-6 text-base font-semibold sm:w-auto"
             >
-              <Sparkles className="size-4" aria-hidden /> Start creating
+              <Sparkles className="size-4" aria-hidden /> {hero.primary.label}
             </Link>
             <Link
-              href="/effects"
+              href={hero.secondary.href}
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-6 text-base font-medium text-white backdrop-blur-md transition-colors hover:bg-white/10 sm:w-auto"
             >
-              Explore effects
+              {hero.secondary.label}
             </Link>
           </div>
         </div>
@@ -143,7 +134,7 @@ export default async function ExplorePage() {
         <div className="grid gap-3 lg:grid-cols-[minmax(0,640px)_minmax(0,1fr)]">
           <div className="relative isolate flex min-h-[272px] flex-col justify-center gap-4 overflow-hidden rounded-[20px] border border-hairline p-6 md:p-8">
             <img
-              src={HERO.mark}
+              src={promo.image}
               alt=""
               width={1200}
               height={675}
@@ -151,26 +142,22 @@ export default async function ExplorePage() {
             />
             <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/90 via-black/65 to-black/0" />
             <p className="font-display text-[30px] leading-[1.05] text-white md:text-[36px]">
-              One balance.
+              {promo.title[0]}
               <br />
-              <span className="text-lime">Every model.</span>
+              <span className="text-lime">{promo.title[1]}</span>
             </p>
             <ul className="flex flex-col gap-1.5 text-[13px] text-white/75">
-              {[
-                "Switch models without switching apps",
-                "Failed runs are refunded automatically",
-                "Top-up credits never expire",
-              ].map((line) => (
+              {promo.bullets.map((line) => (
                 <li key={line} className="flex items-center gap-2">
                   <Check className="size-3.5 text-lime" aria-hidden /> {line}
                 </li>
               ))}
             </ul>
             <Link
-              href="/pricing"
+              href={promo.cta.href}
               className="btn-keycap-white inline-flex h-11 w-fit items-center gap-2 rounded-xl px-5 text-sm font-semibold transition-colors hover:bg-white/90"
             >
-              See plans &amp; credits
+              {promo.cta.label}
             </Link>
           </div>
           <ul role="list" className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -208,23 +195,24 @@ export default async function ExplorePage() {
         >
           <SectionHeader
             id="effects-title"
-            title="Visual effects"
-            description="Signature looks and camera moves. Pick one, add your subject, generate."
+            title={sections.effects.title}
+            description={sections.effects.description}
             action={
               <Link
                 href="/effects"
                 className="btn-keycap inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-semibold md:h-12 md:px-5 md:text-base"
               >
-                <Sparkles className="size-4" aria-hidden /> Try an effect
+                <Sparkles className="size-4" aria-hidden />{" "}
+                {sections.effects.cta}
               </Link>
             }
           />
           <FadeClamp
             href="/effects"
-            label="View all effects"
+            label={`View all ${NICHE.effects.navLabel.toLowerCase()}`}
             className="max-h-[720px] md:max-h-[880px]"
           >
-            <Masonry columns={5} label="Effects">
+            <Masonry columns={5} label={NICHE.effects.navLabel}>
               {effects.slice(0, 12).map((effect) => (
                 <MasonryItem key={effect.slug}>
                   <EffectTile effect={effect} cta="Recreate" />
@@ -242,8 +230,8 @@ export default async function ExplorePage() {
       >
         <SectionHeader
           id="models-title"
-          title="Models"
-          description="The best image and video models in one place. Pick a family to open it in the generator."
+          title={sections.models.title}
+          description={sections.models.description}
         />
         <ScrollRow label="Model families">
           {modelFamilies.map(({ lead, count }) => {
@@ -299,8 +287,8 @@ export default async function ExplorePage() {
       >
         <SectionHeader
           id="community-title"
-          title="Community"
-          description="Fresh from creators who chose to publish. Open any piece to see its prompt and recreate it."
+          title={sections.community.title}
+          description={sections.community.description}
           action={
             community.items.length > 0 ? (
               <Link
@@ -348,10 +336,10 @@ export default async function ExplorePage() {
             }
             action={
               <Link
-                href="/video"
+                href={hero.primary.href}
                 className="btn-keycap inline-flex h-10 items-center gap-2 rounded-[10px] px-4 text-sm font-semibold"
               >
-                <Sparkles className="size-4" aria-hidden /> Start creating
+                <Sparkles className="size-4" aria-hidden /> {hero.primary.label}
               </Link>
             }
           />
@@ -365,7 +353,7 @@ export default async function ExplorePage() {
       >
         <div className="relative isolate flex min-h-[380px] flex-col justify-end gap-5 overflow-hidden rounded-3xl border border-hairline p-6 md:min-h-[440px] md:justify-center md:p-14">
           <img
-            src={HERO.image}
+            src={closing.image}
             alt=""
             width={1800}
             height={1012}
@@ -378,20 +366,20 @@ export default async function ExplorePage() {
             id="cta-title"
             className="font-display text-[36px] leading-[0.95] text-white md:text-[56px]"
           >
-            Your next shot
+            {closing.title[0]}
             <br />
-            <span className="text-lime">starts with a sentence.</span>
+            <span className="text-lime">{closing.title[1]}</span>
           </h2>
           <p className="max-w-[440px] text-sm text-white/75 md:text-base">
-            Describe it, pick a model, press Generate. Keep the takes you love
-            in your library and publish the best ones.
+            {closing.body}
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
-              href="/video"
+              href={closing.primary.href}
               className="btn-keycap inline-flex h-12 items-center justify-center gap-2 rounded-xl px-6 text-base font-semibold"
             >
-              <Sparkles className="size-4" aria-hidden /> Start creating
+              <Sparkles className="size-4" aria-hidden />{" "}
+              {closing.primary.label}
             </Link>
             <Link
               href="/pricing"

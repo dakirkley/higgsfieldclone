@@ -114,6 +114,36 @@ submit against the live estimate (`HF_PRICE_GUARD`). Details:
 Adding the first **audio** model makes the Audio nav item and `/audio` appear
 automatically — the surface, tiles, player and pricing are already wired.
 
+## Niches (one codebase, one brand per deployment)
+
+Each deployment is built for one **niche pack** in `niches/<id>/`: brand
+(name, domain, sender, logo), accent color, homepage, effects and generator
+copy, login carousel, footer, Effects presets, the models it sells, plan copy
+and the mock's sample media. Billing, the ledger, auth and the generation
+pipeline are shared, so a fix ships to every niche.
+
+```bash
+NEXT_PUBLIC_NICHE=default   # Vireo (empty means the same)
+```
+
+Each niche gets its own Vercel project, domain, MongoDB database, Stripe
+products and Resend sender — all built from this repo with a different
+`NEXT_PUBLIC_NICHE`. The value is inlined at build time; an unknown id fails
+the build.
+
+Adding a niche:
+
+1. Copy `niches/default/` to `niches/<id>/`, set `id`, and rewrite the brand,
+   copy and presets. Put its media under `public/niches/<id>/` and point the
+   pack (and `presets.coverDir`, `mock.imageDirs`, `mock.videoDirs`) at it.
+2. Register it in `niches/index.ts`.
+3. Narrow `models.include` / `models.exclude` to what the niche sells.
+4. `pnpm test` — `tests/niches.test.ts` checks every pack: model ids exist and
+   are sold, presets run on sold models, footer links resolve, media files exist.
+
+`NEXT_PUBLIC_BRAND_NAME`, `EMAIL_FROM` and `SUPPORT_EMAIL` override the pack
+when set; leave them blank to use the pack's values.
+
 ## Architecture
 
 ```

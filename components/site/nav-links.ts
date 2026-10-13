@@ -1,4 +1,5 @@
 import { activeSurfaces } from "@/generation/catalog"
+import { NICHE } from "@/niches"
 
 export type NavLink = {
   href: string
@@ -31,7 +32,7 @@ export function navLinks(): NavLink[] {
   links.push(
     {
       href: "/effects",
-      label: "Effects",
+      label: NICHE.effects.navLabel,
       match: (path) => path.startsWith("/effects"),
     },
     {

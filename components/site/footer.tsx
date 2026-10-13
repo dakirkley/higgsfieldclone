@@ -3,40 +3,18 @@
 import Link from "next/link"
 
 import { BRAND } from "@/lib/brand"
+import { NICHE } from "@/niches"
 
 import { LogoMark } from "./logo"
 
-const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
-  {
-    title: "Create",
-    links: [
-      { label: "Image", href: "/image" },
-      { label: "Video", href: "/video" },
-      { label: "Edit video", href: "/video?tab=edit" },
-      { label: "Motion control", href: "/video?tab=motion" },
-      { label: "Effects", href: "/effects" },
-    ],
-  },
-  {
-    title: "Video models",
-    links: [
-      { label: "Seedance 2.5", href: "/video?model=seedance-2.5" },
-      { label: "Kling 3.0", href: "/video?model=kling-3-std" },
-      { label: "Wan 3.0", href: "/video?model=wan-3" },
-      { label: "Cinema Studio 4.0", href: "/video?model=cinema-studio-4" },
-      { label: "MiniMax H3", href: "/video?model=minimax-h3" },
-    ],
-  },
-  {
-    title: "Image models",
-    links: [
-      { label: "Soul 2", href: "/image?model=soul-2" },
-      { label: "Soul Cinema", href: "/image?model=soul-cinema" },
-      { label: "Grok Image 2.0", href: "/image?model=grok-image-2" },
-      { label: "Ideogram 4.0", href: "/image?model=ideogram-4" },
-      { label: "Recraft V4.1", href: "/image?model=recraft-4.1" },
-    ],
-  },
+type Column = {
+  title: string
+  links: readonly { label: string; href: string }[]
+}
+
+/** Niche columns first, then the shared company links. */
+const COLUMNS: readonly Column[] = [
+  ...NICHE.footer.columns,
   {
     title: "Company",
     links: [
@@ -55,11 +33,11 @@ export function Footer() {
       <div className="bg-lime px-6 py-14 text-[#131517] md:px-12">
         <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[1.1fr_2fr]">
           <div className="flex flex-col gap-6">
-            <LogoMark className="size-10 [&_circle]:fill-[#D1FE17] [&_path]:fill-[#D1FE17] [&_rect]:fill-[#131517]" />
+            <LogoMark inverted className="size-10" />
             <p className="font-display text-4xl leading-[0.95] md:text-5xl">
-              Direct every
+              {NICHE.footer.tagline[0]}
               <br />
-              frame yourself
+              {NICHE.footer.tagline[1]}
             </p>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">

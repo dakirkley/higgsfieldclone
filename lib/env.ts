@@ -2,6 +2,8 @@ import "server-only"
 
 import { z } from "zod"
 
+import { NICHE } from "@/niches"
+
 /**
  * Server environment, validated once with zod. Production requires every
  * service; development allows documented fallbacks (magic links in the log,
@@ -29,8 +31,15 @@ const schema = z.object({
 
   AUTH_SECRET: optionalString,
   AUTH_RESEND_KEY: optionalString,
-  EMAIL_FROM: z.string().default("Vireo <login@vireo.studio>"),
-  SUPPORT_EMAIL: z.email().default("support@vireo.studio"),
+  /** Blank = the niche pack's sender and support address. */
+  EMAIL_FROM: optionalString.transform(
+    (value) => value ?? NICHE.brand.emailFrom
+  ),
+  SUPPORT_EMAIL: z.preprocess(
+    (value) =>
+      typeof value === "string" && value.trim() ? value.trim() : undefined,
+    z.email().default(NICHE.brand.supportEmail)
+  ),
   SIGNUP_BONUS_CREDITS: z.coerce.number().int().min(0).default(0),
   /** Comma-separated emails that get the admin role. */
   ADMIN_EMAILS: z

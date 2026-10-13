@@ -3,16 +3,38 @@ import Link from "next/link"
 import { BRAND } from "@/lib/brand"
 import { cn } from "@/lib/utils"
 
-/** Vireo mark: a lime tile with a wing-shaped V. Placeholder wordmark until brand assets arrive. */
-export function LogoMark({ className }: { className?: string }) {
+/**
+ * The niche's logo mark: its own image when the pack sets brand.logoSrc,
+ * otherwise the built-in tile (accent fill, dark V). `inverted` swaps the two
+ * for use on an accent background (the footer).
+ */
+export function LogoMark({
+  className,
+  inverted = false,
+}: {
+  className?: string
+  inverted?: boolean
+}) {
+  if (BRAND.logoSrc)
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={BRAND.logoSrc}
+        alt=""
+        aria-hidden
+        className={cn("size-8 rounded-lg object-contain", className)}
+      />
+    )
+  const tile = inverted ? "fill-[#131517]" : "fill-lime"
+  const ink = inverted ? "fill-lime" : "fill-[#131517]"
   return (
     <svg viewBox="0 0 32 32" aria-hidden className={cn("size-8", className)}>
-      <rect width="32" height="32" rx="8" fill="#D1FE17" />
+      <rect width="32" height="32" rx="8" className={tile} />
       <path
         d="M7.5 9.5c2.6 0 4.4 1.3 5.6 3.9L16 19.6l4.3-9.2c.5-1 1.4-1.6 2.5-1.6h1.7L17.6 23.5h-3.2L9.2 12.4c-.4-.9-1-1.4-1.7-1.6V9.5z"
-        fill="#131517"
+        className={ink}
       />
-      <circle cx="23.6" cy="8.6" r="1.3" fill="#131517" />
+      <circle cx="23.6" cy="8.6" r="1.3" className={ink} />
     </svg>
   )
 }

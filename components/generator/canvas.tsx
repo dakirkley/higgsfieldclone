@@ -8,47 +8,11 @@ import { useApp } from "@/components/providers/app-providers"
 import { UserGenerations } from "@/components/studio/user-generations"
 import type { GeneratorTab, Surface } from "@/generation/catalog/types"
 import { runToGalleryItems } from "@/lib/studio/gallery-items"
-import { STEPS } from "@/lib/showcase"
+import { HEADLINES, STEPS } from "@/lib/showcase"
 import { cn } from "@/lib/utils"
 
 import { useTileActions } from "./tile-actions"
 import type { Generator } from "./use-generator"
-
-const HEADLINE: Record<Surface, Record<GeneratorTab, [string, string]>> = {
-  video: {
-    create: [
-      "Make videos in one click",
-      "Start from text, a first frame or a stack of references — then direct the camera.",
-    ],
-    edit: [
-      "Edit any video with words",
-      "Upload a clip, describe the change, keep the framing.",
-    ],
-    motion: [
-      "Copy any motion",
-      "Give us a motion clip and a character image; we transfer every move.",
-    ],
-  },
-  image: {
-    create: [
-      "Start creating with any model",
-      "Describe a scene, character, mood or style — and watch it come to life.",
-    ],
-    edit: [
-      "Edit images with words",
-      "Attach references and describe the change.",
-    ],
-    motion: ["Start creating", "Describe what you want to see."],
-  },
-  audio: {
-    create: [
-      "Turn text into sound",
-      "Voices, effects and music from a single prompt.",
-    ],
-    edit: ["Edit audio", "Describe the change you want."],
-    motion: ["Design a voice", "Describe the voice you need."],
-  },
-}
 
 export function HowItWorks({
   surface,
@@ -57,7 +21,7 @@ export function HowItWorks({
   surface: Surface
   tab: GeneratorTab
 }) {
-  const [title, subtitle] = HEADLINE[surface][tab]
+  const [title, subtitle] = HEADLINES[surface][tab]
   const steps = STEPS[surface]
   const centered = tab !== "create"
   return (

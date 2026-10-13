@@ -10,20 +10,23 @@ import {
 } from "@react-email/components"
 import type { ReactNode } from "react"
 
+import { NICHE } from "../niches"
+
 export const EMAIL_COLORS = {
   page: "#0F1113",
   card: "#131517",
   border: "#23262A",
   text: "#F7F7F8",
   muted: "#898A8B",
-  lime: "#D1FE17",
+  /** The niche accent (default lime) for the wordmark and buttons. */
+  lime: NICHE.theme.accent ?? "#D1FE17",
   onLime: "#131517",
 } as const
 
 const font =
   "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 
-/** Shared dark frame for every Vireo email. */
+/** Shared dark frame for every email. */
 export function EmailFrame({
   preview,
   brand,

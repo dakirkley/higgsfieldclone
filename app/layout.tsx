@@ -13,7 +13,9 @@ import { getBalance } from "@/lib/account"
 import { currentUser } from "@/lib/auth/session"
 import { BRAND } from "@/lib/brand"
 import { clientPricing, type ClientPricing } from "@/lib/billing/pricing"
+import { accentStyle } from "@/lib/theme"
 import { cn } from "@/lib/utils"
+import { NICHE } from "@/niches"
 
 import "./globals.css"
 
@@ -38,18 +40,18 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_URL ?? BRAND.productionUrl),
   title: {
-    default: `${BRAND.name} — AI image & video studio`,
+    default: `${BRAND.name} — ${BRAND.titleSuffix}`,
     template: `%s · ${BRAND.name}`,
   },
   description: BRAND.description,
   openGraph: {
-    title: `${BRAND.name} — AI image & video studio`,
+    title: `${BRAND.name} — ${BRAND.titleSuffix}`,
     description: BRAND.description,
-    images: ["/media/hero/coast.jpg"],
+    images: [BRAND.ogImage],
     type: "website",
   },
   twitter: { card: "summary_large_image" },
-  icons: { icon: "/icon.svg" },
+  icons: { icon: BRAND.logoSrc ?? "/icon.svg" },
 }
 
 export const viewport: Viewport = { themeColor: "#0f1113", colorScheme: "dark" }
@@ -95,6 +97,7 @@ export default async function RootLayout({
     <html
       lang="en"
       data-theme="default-dark"
+      style={accentStyle(NICHE.theme)}
       className={cn(
         "dark font-sans antialiased",
         spaceGrotesk.variable,

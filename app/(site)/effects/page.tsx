@@ -7,12 +7,14 @@ import { loadEffects } from "@/components/marketing/data"
 import { EffectsGallery } from "@/components/marketing/effects-gallery"
 import { EmptyCard } from "@/components/marketing/empty-card"
 import { PRESET_CATEGORIES } from "@/lib/presets/seed-data"
+import { NICHE } from "@/niches"
+
+const copy = NICHE.effects
 
 export const metadata: Metadata = {
-  title: "Visual effects",
-  description:
-    "Ready-made looks and camera moves for image and video. Pick an effect, describe your subject and generate.",
-  openGraph: { images: ["/media/presets/neon-noir.jpg"] },
+  title: copy.title,
+  description: copy.description,
+  openGraph: { images: [copy.ogImage] },
 }
 
 export default async function EffectsPage() {
@@ -26,25 +28,24 @@ export default async function EffectsPage() {
         <Atmosphere glow="top" className="-z-10" />
         <div className="mx-auto flex max-w-[1440px] flex-col items-start gap-5 px-4 pt-12 pb-10 md:items-center md:pt-20 md:pb-14 md:text-center">
           <Link
-            href="/video"
-            className="font-display inline-flex h-8 items-center gap-1.5 rounded-full bg-lime/15 px-3 text-[13px] text-lime shadow-[0_0_24px_rgba(209,254,23,0.25)] transition-colors hover:bg-lime/25"
+            href={copy.eyebrow.href}
+            className="font-display inline-flex h-8 items-center gap-1.5 rounded-full bg-lime/15 px-3 text-[13px] text-lime shadow-[0_0_24px_color-mix(in_srgb,var(--color-lime)_25%,transparent)] transition-colors hover:bg-lime/25"
           >
-            <Sparkles className="size-3.5" aria-hidden /> Try for free
+            <Sparkles className="size-3.5" aria-hidden /> {copy.eyebrow.label}
           </Link>
           <h1
             id="effects-title"
             className="font-display text-[44px] leading-[0.95] tracking-[-0.04em] text-lime md:text-[96px] md:leading-[100px]"
           >
-            Visual effects
+            {copy.title}
           </h1>
           <p className="max-w-[560px] text-sm text-muted-foreground md:text-base">
-            Ready-made looks and camera moves. Pick one, describe your subject,
-            and the effect brings the lighting, lens and motion.
+            {copy.description}
           </p>
         </div>
       </section>
       <section
-        aria-label="Effects gallery"
+        aria-label={`${copy.navLabel} gallery`}
         className="mx-auto w-full max-w-[1440px] px-4"
       >
         {effects.length > 0 ? (

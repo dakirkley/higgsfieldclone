@@ -7,6 +7,8 @@ import { findModel } from "@/generation/catalog"
 import { UserFacingError } from "@/lib/errors"
 import { collections, type PresetDoc } from "@/lib/db/collections"
 
+import { NICHE } from "@/niches"
+
 import { PRESET_LOOPS, PRESET_SEED } from "./seed-data"
 
 export interface PresetView {
@@ -26,7 +28,7 @@ export interface PresetView {
 }
 
 export function coverFor(slug: string): string {
-  return `/media/presets/${slug}.jpg`
+  return `${NICHE.presets.coverDir ?? "/media/presets"}/${slug}.jpg`
 }
 
 function toView(doc: PresetDoc): PresetView {

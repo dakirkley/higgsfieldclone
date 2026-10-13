@@ -8,8 +8,11 @@
  *
  * Prompt tokens steer outcomes: "[fail]" → failed, "[nsfw]" → nsfw,
  * "[slow]" → stays queued 20 s (cancelable), otherwise completes in ~6 s.
- * Outputs are our own sample media from /public/media.
+ * Outputs are the niche's sample media (niche.mock dirs under /public), so
+ * NEXT_PUBLIC_NICHE=<id> makes demos look on-topic.
  */
+import "./load-env"
+
 import { randomUUID } from "node:crypto"
 import { readdirSync, readFileSync } from "node:fs"
 import {
@@ -19,9 +22,11 @@ import {
 } from "node:http"
 import { extname, join } from "node:path"
 
+import { NICHE } from "../niches"
+
 const PORT = Number(process.env.MOCK_HF_PORT ?? 4010)
 const BASE = `http://localhost:${PORT}`
-const PUBLIC = join(process.cwd(), "public", "media")
+const PUBLIC = join(process.cwd(), "public")
 
 type Request = {
   status:
@@ -36,13 +41,14 @@ type Request = {
 
 const requests = new Map<string, Request>()
 const uploads = new Map<string, { type: string; body: Buffer }>()
-const images = [
-  ...readdirSync(join(PUBLIC, "presets")).map((f) => `presets/${f}`),
-  ...readdirSync(join(PUBLIC, "showcase")).map((f) => `showcase/${f}`),
-].filter((f) => f.endsWith(".jpg"))
-const videos = readdirSync(join(PUBLIC, "loops"))
-  .filter((f) => f.endsWith(".mp4"))
-  .map((f) => `loops/${f}`)
+const samples = (dirs: readonly string[], ext: string) =>
+  dirs.flatMap((dir) =>
+    readdirSync(join(PUBLIC, dir))
+      .filter((f) => f.endsWith(ext))
+      .map((f) => `${dir}/${f}`)
+  )
+const images = samples(NICHE.mock.imageDirs, ".jpg")
+const videos = samples(NICHE.mock.videoDirs, ".mp4")
 
 const TYPES: Record<string, string> = {
   ".jpg": "image/jpeg",
@@ -237,6 +243,6 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, () =>
   console.log(
-    `Mock Higgsfield API on ${BASE} (${images.length} images, ${videos.length} videos)`
+    `Mock Higgsfield API on ${BASE} — niche "${NICHE.id}" (${images.length} images, ${videos.length} videos)`
   )
 )

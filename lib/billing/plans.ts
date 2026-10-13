@@ -1,4 +1,5 @@
 import type { Surface } from "@/generation/catalog/types"
+import { NICHE } from "@/niches"
 
 /**
  * Plans and top-up packs. Prices are SUGGESTED defaults pending the owner's
@@ -28,7 +29,7 @@ export interface Plan {
   stripePriceEnv?: { month: string; year: string }
 }
 
-export const PLANS: Record<PlanId, Plan> = {
+const BASE_PLANS: Record<PlanId, Plan> = {
   free: {
     id: "free",
     name: "Free",
@@ -112,6 +113,14 @@ export const PLANS: Record<PlanId, Plan> = {
     },
   },
 }
+
+/** Shared plans with the niche's display copy (name, tagline, features) on top. */
+export const PLANS: Record<PlanId, Plan> = Object.fromEntries(
+  Object.entries(BASE_PLANS).map(([id, plan]) => [
+    id,
+    { ...plan, ...NICHE.plans?.[id as PlanId] },
+  ])
+) as Record<PlanId, Plan>
 
 export const PAID_PLANS = [PLANS.starter, PLANS.plus, PLANS.ultra] as const
 

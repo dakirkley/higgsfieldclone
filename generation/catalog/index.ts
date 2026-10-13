@@ -1,8 +1,13 @@
-import { MODELS } from "./models.generated"
+import { NICHE, nicheAllowsModel } from "@/niches"
+
+import { MODELS as ALL_MODELS } from "./models.generated"
 import { parseSettings } from "./parse-settings"
 import type { GeneratorTab, ModelEntry, Surface } from "./types"
 
-export { MODELS }
+/** Models this deployment sells: the full catalog narrowed by the niche pack. */
+export const MODELS: readonly ModelEntry[] = ALL_MODELS.filter((entry) =>
+  nicheAllowsModel(NICHE, entry.id)
+)
 
 export const SURFACES: readonly Surface[] = ["image", "video", "audio"]
 

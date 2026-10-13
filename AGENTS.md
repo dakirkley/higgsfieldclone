@@ -11,6 +11,9 @@ scaffolded from `higgsfield-ai/app-templates` (studio). Read `README.md`,
   (account, billing, admin) · `app/api` route handlers · `app/actions` server actions.
 - `generation/catalog/models/*.ts` — one file per model family; the barrel is
   generated (`pnpm models`). Never hand-edit `models.generated.ts`.
+- `niches/<id>/` — one pack per brand (copy, accent, presets, model list, plan
+  copy, mock media), picked by `NEXT_PUBLIC_NICHE`. Niche-specific text and
+  media belong in a pack, not in components; packs stay plain data.
 - `lib/higgsfield` (server-only platform client), `lib/generations` (submit,
   finalize, reconcile, cancel, library), `lib/billing` (price, ledger, Stripe),
   `lib/db`, `lib/storage` (R2 / local), `lib/uploads.ts`, `auth.ts`.
